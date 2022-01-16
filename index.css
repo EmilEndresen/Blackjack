@@ -67,7 +67,7 @@ h2 {
     flex-direction: column;
 }
 
-#next-hand, #hit-me, #stay  {
+#next-hand, #hit-me, #stay, #new-game  {
     margin-bottom: 3rem;
     margin-left: 1rem;
 }
