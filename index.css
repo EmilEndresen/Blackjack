@@ -34,7 +34,7 @@ h2 {
     z-index: 1;
     width: 85%;
     padding: 2rem 4rem 5rem 4rem;
-    background: url(/bg-img/table.png);
+    background: url(./images/table.png);
     background-repeat: no-repeat;
     background-size: cover;
 }

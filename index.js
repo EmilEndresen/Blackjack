@@ -7,37 +7,30 @@ let roundWon = false
 let roundTied = false
 let roundLost = false
 
-const dealerScoreNode = document.querySelector("#dealer-number")
-const dealerCardsNode = document.querySelector("#dealer-cards")
-const playerScoreNode = document.querySelector("#player-number")
-const playerCardsNode = document.querySelector("#player-cards")
-const announcementNode = document.querySelector("#announcement")
-const newDeckNode = document.querySelector("#new-game")
-const nextHandNode = document.querySelector("#next-hand")
-const hitMeNode = document.querySelector("#hit-me")
-const stayNode = document.querySelector("#stay")
+const dealerScoreArea = document.querySelector("#dealer-number")
+const dealerCardsArea = document.querySelector("#dealer-cards")
+const playerScoreArea = document.querySelector("#player-number")
+const playerCardsArea = document.querySelector("#player-cards")
+const announcementArea = document.querySelector("#announcement")
+const newDeckArea = document.querySelector("#new-game")
+const nextHandArea = document.querySelector("#next-hand")
+const hitMeArea = document.querySelector("#hit-me")
+const stayArea = document.querySelector("#stay")
 
+newDeckArea.onclick = getNewDeck
+nextHandArea.onclick = newHand
+hitMeArea.onclick = () => hitMe('player')
+stayArea.onclick = () => setTimeout(() => dealerPlays(), 600)
 
-// On click events
-// ==================
-newDeckNode.onclick = getNewDeck
-nextHandNode.onclick = newHand
-hitMeNode.onclick = () => hitMe('player')
-stayNode.onclick = () => setTimeout(() => dealerPlays(), 600)
-// ==================
-
-
-// Game mechanics functions
-// ========================
 function getNewDeck() {
     resetGame()
     fetch ("http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6")
     .then(response => response.json())
     .then(response => {
         deckID = response.deck_id
-        nextHandNode.style.display = "block"
-        hitMeNode.style.display = "none"
-        stayNode.style.display = "none"
+        nextHandArea.style.display = "block"
+        hitMeArea.style.display = "none"
+        stayArea.style.display = "none"
     })
 }
 
@@ -46,44 +39,41 @@ function newHand() {
   fetch(`https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=4`)
     .then(response => response.json())
     .then(response => {
-      hitMeNode.style.display = "block"
-      stayNode.style.display = "block"
+      hitMeArea.style.display = "block"
+      stayArea.style.display = "block"
 
       dealerCards.push(response.cards[0], response.cards[1])
       playerCards.push(response.cards[2], response.cards[3])
 
       dealerScore = "?"
-      dealerScoreNode.textContent = dealerScore
+      dealerScoreArea.textContent = dealerScore
 
       dealerCards.forEach((card, i) => {
         let cardDomElement = document.createElement("img")
         if (i === 0) {
-          cardDomElement.src = "./card.png"
+          cardDomElement.src = "./images/card.png"
         } else {
           cardDomElement.src = card.image
         }
-        dealerCardsNode.appendChild(cardDomElement)
+        dealerCardsArea.appendChild(cardDomElement)
       })
 
       playerCards.forEach(card => {
         let cardDomElement = document.createElement("img")
         cardDomElement.src = card.image
-        playerCardsNode.appendChild(cardDomElement)
+        playerCardsArea.appendChild(cardDomElement)
       })
 
       playerScore = computeScore(playerCards)
       if (playerScore === 21) {
         roundWon = true
-        announcementNode.textContent = "BlackJack! You Win!"
+        announcementArea.textContent = "BlackJack! You Win!"
       }
-      playerScoreNode.textContent = playerScore
+      playerScoreArea.textContent = playerScore
 
     })
   }
 
-
-
-  // This function receives an array of cards and returns the total score.
 function computeScore(cards) {
   let hasAce = false
   score = cards.reduce((acc, card) => {
@@ -111,14 +101,14 @@ function hitMe(target) {
       playerCards.push(response.cards[0])
       let cardDomElement = document.createElement("img");
       cardDomElement.src = response.cards[0].image;
-      playerCardsNode.appendChild(cardDomElement)
+      playerCardsArea.appendChild(cardDomElement)
 
       playerScore = computeScore(playerCards);
 
-      playerScoreNode.textContent = playerScore;
+      playerScoreArea.textContent = playerScore;
       if (playerScore > 21) {
         roundLost = true;
-        announcementNode.textContent = "Bust"
+        announcementArea.textContent = "Bust"
       }
     }
 
@@ -126,7 +116,7 @@ function hitMe(target) {
       let cardDomElement = document.createElement("img");
       dealerCards.push(response.cards[0])
       cardDomElement.src = response.cards[0].image;
-      dealerCardsNode.appendChild(cardDomElement)
+      dealerCardsArea.appendChild(cardDomElement)
       dealerPlays();
     }
 
@@ -136,26 +126,26 @@ function hitMe(target) {
 function dealerPlays() {
   if (roundLost || roundWon || roundTied) {return}
   dealerScore = computeScore(dealerCards);
-  dealerScoreNode.textContent = dealerScore;
-  dealerCardsNode.firstChild.src = dealerCards[0].image;
+  dealerScoreArea.textContent = dealerScore;
+  dealerCardsArea.firstChild.src = dealerCards[0].image;
   if (dealerScore < 17) {
     setTimeout(()=>hitMe('dealer'), 1000)
   }
   else if (dealerScore > 21) {
     roundWon = true;
-    announcementNode.textContent = "Dealer busts, you win!";
+    announcementArea.textContent = "Dealer busts, you win!";
   }
   else if (dealerScore > playerScore) {
     roundLost = true;
-    announcementNode.textContent = "You lose!";
+    announcementArea.textContent = "You lose!";
   }
   else if (dealerScore === playerScore) {
     roundTied = true;
-    announcementNode.textContent = "Push, It's a draw";
+    announcementArea.textContent = "Push, It's a draw";
   }
   else {
     roundWon = true;
-    announcementNode.textContent = "You win!";
+    announcementArea.textContent = "You win!";
   }
 }
 
@@ -167,12 +157,12 @@ function resetGame() {
   roundTied = false
   dealerScore = ""
   playerScore = 0
-  dealerScoreNode.textContent = dealerScore
-  announcementNode.textContent = ""
-  while (dealerCardsNode.firstChild) {
-    dealerCardsNode.removeChild(dealerCardsNode.firstChild)
+  dealerScoreArea.textContent = dealerScore
+  announcementArea.textContent = ""
+  while (dealerCardsArea.firstChild) {
+    dealerCardsArea.removeChild(dealerCardsArea.firstChild)
   }
-  while (playerCardsNode.firstChild) {
-    playerCardsNode.removeChild(playerCardsNode.firstChild)
+  while (playerCardsArea.firstChild) {
+    playerCardsArea.removeChild(playerCardsArea.firstChild)
   }
 }
