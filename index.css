@@ -24,6 +24,11 @@ h2 {
     color: white;
 }
 
+.dealer-score {
+    margin-top: 1rem;
+    margin-bottom: 4rem
+}
+
 .game-container {
     display: flex;
     flex-flow: row nowrap;
@@ -62,18 +67,17 @@ h2 {
 
 #action-area {
     z-index: 10;
-    width: 15%;
+    width: 20%;
     display: flex;
     flex-direction: column;
 }
 
-#next-hand, #hit-me, #stay, #new-game  {
-    margin-bottom: 3rem;
-    margin-left: 1rem;
+#next-hand, #hit-me, #stay {
+    margin: 0 0 3rem 1rem
 }
 
 #new-game {
-    margin-bottom: 1rem;
+    margin: 0 0 8rem 1rem;
 }
 
 button {

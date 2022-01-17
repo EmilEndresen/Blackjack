@@ -22,6 +22,8 @@ nextHandArea.onclick = newHand
 hitMeArea.onclick = () => hitMe('player')
 stayArea.onclick = () => setTimeout(() => dealerPlays(), 600)
 
+
+// Fetches and shuffles six deks from the deckofcardsapi and displays the next hand button
 function getNewDeck() {
     resetGame()
     fetch ("http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6")
@@ -29,10 +31,9 @@ function getNewDeck() {
     .then(response => {
         deckID = response.deck_id
         nextHandArea.style.display = "block"
-        hitMeArea.style.display = "none"
-        stayArea.style.display = "none"
     })
 }
+
 
 function newHand() {
   resetGame()
@@ -129,19 +130,19 @@ function dealerPlays() {
   dealerScoreArea.textContent = dealerScore;
   dealerCardsArea.firstChild.src = dealerCards[0].image;
   if (dealerScore < 17) {
-    setTimeout(()=>hitMe('dealer'), 1000)
+    setTimeout(()=> hitMe('dealer'), 1000)
   }
   else if (dealerScore > 21) {
     roundWon = true;
     announcementArea.textContent = "Dealer busts, you win!";
   }
-  else if (dealerScore > playerScore) {
-    roundLost = true;
-    announcementArea.textContent = "You lose!";
-  }
   else if (dealerScore === playerScore) {
     roundTied = true;
     announcementArea.textContent = "Push, It's a draw";
+  }
+  else if (dealerScore > playerScore) {
+    roundLost = true;
+    announcementArea.textContent = "You lose!";
   }
   else {
     roundWon = true;
